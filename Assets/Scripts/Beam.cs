@@ -17,7 +17,7 @@ public class Beam : MonoBehaviour {
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        print(CalculateDamage());
+        //print(CalculateDamage());
     }
 
     float CalculateDamage()

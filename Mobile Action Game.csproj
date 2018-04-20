@@ -283,6 +283,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Boss.cs" />
+    <Compile Include="Assets\BossHitBoxManager.cs" />
     <Compile Include="Assets\Scripts\Beam.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
   </ItemGroup>
