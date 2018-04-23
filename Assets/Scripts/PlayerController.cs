@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
     Rigidbody2D body;
     public GameObject beam;
     Vector3 previousGood = Vector3.zero;
+    bool attacking = false;
     // Use this for initialization
     void Start () {
         body = GetComponent<Rigidbody2D>();
@@ -37,15 +38,29 @@ public class PlayerController : MonoBehaviour {
         {
             print("Clicked");
             DrawBeam_Mouse();
+            attacking = true;
         }  else
         {
             beam.SetActive(false);
+            attacking = false;
+
         }
 
-        if(Input.GetAxis("RightStickH") > 0 || Input.GetAxis("RightStickH") < 0 || Input.GetAxis("RightStickV") > 0 || Input.GetAxis("RightStickV") < 0)
+        if (Input.GetAxis("RightStickH") > 0 || Input.GetAxis("RightStickH") < 0 || Input.GetAxis("RightStickV") > 0 || Input.GetAxis("RightStickV") < 0)
         {
             print("Using right stick");
             DrawBeam_Stick();
+            attacking = true;
+
+        }
+
+        if (attacking)
+        {
+            GetComponent<Animator>().SetBool("Attacking", true);
+        } else
+        {
+            GetComponent<Animator>().SetBool("Attacking", false);
+
         }
 
     }
@@ -82,7 +97,7 @@ public class PlayerController : MonoBehaviour {
             {
                 beam.SetActive(true);
                 beam.transform.eulerAngles = new Vector3(0,0,angle);
-                beam.GetComponent<SpriteRenderer>().size = new Vector2(Vector2.Distance(beam.transform.position, enemyhit.point), 1);
+                beam.GetComponent<SpriteRenderer>().size = new Vector2(Vector2.Distance(beam.transform.position, enemyhit.point) +1, 1);
                 break;
             }
         }
@@ -118,7 +133,7 @@ public class PlayerController : MonoBehaviour {
             {
                 beam.SetActive(true);
                 beam.transform.rotation = q;
-                beam.GetComponent<SpriteRenderer>().size = new Vector2(Vector2.Distance(beam.transform.position, enemyhit.point), 1);
+                beam.GetComponent<SpriteRenderer>().size = new Vector2(Vector2.Distance(beam.transform.position, enemyhit.point) + 1, 1);
                 break;
             }
         }

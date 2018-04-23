@@ -17,7 +17,12 @@ public class Beam : MonoBehaviour {
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //print(CalculateDamage());
+        if(collision.tag == "Enemy")
+        {
+            collision.GetComponentInParent<Boss>().health -= CalculateDamage();
+            print("Bird Boss: " + collision.GetComponentInParent<Boss>().health);
+        }
+
     }
 
     float CalculateDamage()

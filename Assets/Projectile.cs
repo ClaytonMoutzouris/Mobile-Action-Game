@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour {
-    float speed = 5;
+    public float speed = 5;
 
 	// Use this for initialization
 	void Start () {
