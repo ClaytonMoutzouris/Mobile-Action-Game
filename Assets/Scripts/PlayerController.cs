@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerState { Idle, Attacking };
+
 public class PlayerController : MonoBehaviour {
 
     public float speed = 50;
@@ -9,6 +11,7 @@ public class PlayerController : MonoBehaviour {
     public GameObject beam;
     Vector3 previousGood = Vector3.zero;
     bool attacking = false;
+    public PlayerState playerState = PlayerState.Idle;
     // Use this for initialization
     void Start () {
         body = GetComponent<Rigidbody2D>();
@@ -17,29 +20,22 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetAxis("Horizontal") > 0)
+        playerState = PlayerState.Idle;
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
-            body.AddForce(new Vector2(speed,0));
+            body.velocity = new Vector2(Input.GetAxisRaw("Horizontal")*speed, Input.GetAxisRaw("Vertical") * speed);
         }
-        if (Input.GetAxis("Horizontal") < 0)
-        {
-            body.AddForce(new Vector2(-speed, 0));
-        }
-        if (Input.GetAxis("Vertical") > 0)
-        {
-            body.AddForce(new Vector2(0, speed));
-        }
-        if (Input.GetAxis("Vertical") < 0)
-        {
-            body.AddForce(new Vector2(0, -speed));
-        }
+
+        print(body.velocity);
 
         if (Input.GetMouseButton(0))
         {
-            print("Clicked");
             DrawBeam_Mouse();
             attacking = true;
-        }  else
+            playerState = PlayerState.Attacking;
+
+        }
+        else
         {
             beam.SetActive(false);
             attacking = false;
@@ -48,20 +44,15 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetAxis("RightStickH") > 0 || Input.GetAxis("RightStickH") < 0 || Input.GetAxis("RightStickV") > 0 || Input.GetAxis("RightStickV") < 0)
         {
-            print("Using right stick");
             DrawBeam_Stick();
             attacking = true;
+            playerState = PlayerState.Attacking;
+
 
         }
 
-        if (attacking)
-        {
-            GetComponent<Animator>().SetBool("Attacking", true);
-        } else
-        {
-            GetComponent<Animator>().SetBool("Attacking", false);
-
-        }
+        
+            GetComponent<Animator>().SetInteger("PlayerState", (int)playerState);
 
     }
 

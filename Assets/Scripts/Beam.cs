@@ -19,8 +19,8 @@ public class Beam : MonoBehaviour {
     {
         if(collision.tag == "Enemy")
         {
-            collision.GetComponentInParent<Boss>().health -= CalculateDamage();
-            print("Bird Boss: " + collision.GetComponentInParent<Boss>().health);
+            collision.GetComponentInParent<Boss>().TakeDamage(CalculateDamage());
+            
         }
 
     }

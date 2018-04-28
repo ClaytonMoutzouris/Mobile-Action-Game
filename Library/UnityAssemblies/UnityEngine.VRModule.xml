@@ -1961,7 +1961,7 @@
         <para>Indicates whether or not the operation was successful.</para>
       </summary>
     </member>
-    <member name="M:UnityEngine.XR.WSA.WebCam.PhotoCapture.StartPhotoModeAsync">
+    <member name="M:UnityEngine.XR.WSA.WebCam.PhotoCapture.StartPhotoModeAsync(UnityEngine.XR.WSA.WebCam.CameraParameters,UnityEngine.XR.WSA.WebCam.PhotoCapture/OnPhotoModeStartedCallback)">
       <summary>
         <para>Asynchronously starts photo mode.</para>
       </summary>
