@@ -237,6 +237,7 @@
     <Compile Include="Assets\Boss.cs" />
     <Compile Include="Assets\BossHitBoxManager.cs" />
     <Compile Include="Assets\HealthBar.cs" />
+    <Compile Include="Assets\PlayerHealth.cs" />
     <Compile Include="Assets\Projectile.cs" />
     <Compile Include="Assets\Scripts\Beam.cs" />
     <Compile Include="Assets\Scripts\BounceProjectile.cs" />

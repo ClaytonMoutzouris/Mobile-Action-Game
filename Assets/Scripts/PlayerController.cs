@@ -12,10 +12,15 @@ public class PlayerController : MonoBehaviour {
     Vector3 previousGood = Vector3.zero;
     bool attacking = false;
     public PlayerState playerState = PlayerState.Idle;
+
+    public int Health;
+
+
     // Use this for initialization
     void Start () {
         body = GetComponent<Rigidbody2D>();
         beam.SetActive(false);
+        PlayerHealth.instance.Initialize(Health);
 	}
 	
 	// Update is called once per frame
@@ -130,5 +135,13 @@ public class PlayerController : MonoBehaviour {
         }
         
 
+    }
+
+    
+
+    public void TakeDamage()
+    {
+        Health--;
+        PlayerHealth.instance.UpdateHealth(Health);
     }
 }
