@@ -27,7 +27,7 @@ public class Projectile : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.tag == "Player" && !collision.GetComponent<PlayerController>().invicible)
         {
             Destroy(gameObject);
             collision.GetComponent<PlayerController>().TakeDamage();

@@ -4,31 +4,51 @@ using UnityEngine;
 
 public enum PlayerState { Idle, Attacking };
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour
+{
 
     public float speed = 50;
     Rigidbody2D body;
+    SpriteRenderer renderer;
     public GameObject beam;
     Vector3 previousGood = Vector3.zero;
     bool attacking = false;
     public PlayerState playerState = PlayerState.Idle;
-
+    public Vector2 spawnPosition;
     public int Health;
+    public bool invicible;
+    public int invicibilityTimer, invicibilityLength;
 
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
+        invicible = false;
         body = GetComponent<Rigidbody2D>();
         beam.SetActive(false);
         PlayerHealth.instance.Initialize(Health);
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        spawnPosition = transform.position;
+        renderer = GetComponent<SpriteRenderer>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         playerState = PlayerState.Idle;
+
+        HandleInput();
+
+
+        GetComponent<Animator>().SetInteger("PlayerState", (int)playerState);
+
+    }
+
+
+    void HandleInput()
+    {
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
-            body.velocity = new Vector2(Input.GetAxisRaw("Horizontal")*speed, Input.GetAxisRaw("Vertical") * speed);
+            body.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * speed, Input.GetAxisRaw("Vertical") * speed);
         }
 
         print(body.velocity);
@@ -55,10 +75,6 @@ public class PlayerController : MonoBehaviour {
 
 
         }
-
-        
-            GetComponent<Animator>().SetInteger("PlayerState", (int)playerState);
-
     }
 
     float CalculateBeamAngle()
@@ -69,7 +85,7 @@ public class PlayerController : MonoBehaviour {
         //print("Object Pos " + objectPos + "Mouse Pos " + mousePos);
 
         //angle = Vector2.Angle(mousePos, objectPos);
-       // print("angle" +angle);
+        // print("angle" +angle);
         angle = Mathf.Atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Mathf.PI;
 
         return angle;
@@ -85,19 +101,19 @@ public class PlayerController : MonoBehaviour {
     {
         Vector2 direction = BeamDirection();
         float angle = CalculateBeamAngle();
-       RaycastHit2D[] hit = Physics2D.RaycastAll(beam.transform.position, direction, Mathf.Infinity);
+        RaycastHit2D[] hit = Physics2D.RaycastAll(beam.transform.position, direction, Mathf.Infinity);
 
         foreach (RaycastHit2D enemyhit in hit)
         {
             if (enemyhit.collider != null && enemyhit.collider.tag == "Enemy" || enemyhit.collider.tag == "Wall")
             {
                 beam.SetActive(true);
-                beam.transform.eulerAngles = new Vector3(0,0,angle);
-                beam.GetComponent<SpriteRenderer>().size = new Vector2(Vector2.Distance(beam.transform.position, enemyhit.point) +1, 1);
+                beam.transform.eulerAngles = new Vector3(0, 0, angle);
+                beam.GetComponent<SpriteRenderer>().size = new Vector2(Vector2.Distance(beam.transform.position, enemyhit.point) + 1, 1);
                 break;
             }
         }
-        
+
     }
 
     float CalculateBeamLength()
@@ -133,15 +149,45 @@ public class PlayerController : MonoBehaviour {
                 break;
             }
         }
-        
+
 
     }
 
-    
+
 
     public void TakeDamage()
     {
         Health--;
         PlayerHealth.instance.UpdateHealth(Health);
+        PlayerDeath();
+    }
+
+    public void PlayerDeath()
+    {
+        transform.position = spawnPosition;
+        invicible = true;
+        StartCoroutine(Invicibility());
+        StartCoroutine(StopInviciblility());
+    }
+
+    // Functions to be used as Coroutines MUST return an IEnumerator
+    IEnumerator Invicibility()
+    {
+        while (invicible)
+        {
+            renderer.material.color = Color.clear;
+            yield return new WaitForSeconds(.1f);
+            renderer.material.color = Color.white;
+            yield return new WaitForSeconds(.1f);
+        }  
+    }
+
+    IEnumerator StopInviciblility()
+    {
+        //wait for 5 seconds
+        yield return new WaitForSeconds(invicibilityLength);
+        //stop the blinking
+        invicible = false;
+        //set a different text just for sake of clarity
     }
 }

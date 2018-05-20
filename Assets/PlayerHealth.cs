@@ -7,7 +7,7 @@ public class PlayerHealth : MonoBehaviour {
     public static PlayerHealth instance;
     public List<GameObject> hearts;
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         instance = this;
         hearts = new List<GameObject>();
 	}
